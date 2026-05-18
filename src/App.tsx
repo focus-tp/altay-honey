@@ -35,16 +35,13 @@ export default function App() {
     return msg;
   };
 
-  const handleCopyAndOpen = (url: string, platform: string) => {
+  // Новая, безопасная от блокировщиков рекламы функция копирования
+  const handleCopy = (platform: string) => {
     const text = getOrderMessage();
-    navigator.clipboard.writeText(text).then(() => {
-      setCopyStatus(platform);
-      // Задержка 2.5 секунды перед открытием ссылки
-      setTimeout(() => {
-        setCopyStatus(null);
-        window.open(url, '_blank');
-      }, 2500);
-    });
+    // Фоновое копирование
+    navigator.clipboard.writeText(text).catch(() => {});
+    setCopyStatus(platform);
+    setTimeout(() => setCopyStatus(null), 3000);
   };
 
   const varieties = [
@@ -645,33 +642,42 @@ export default function App() {
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                  <button 
-                    onClick={() => handleCopyAndOpen(`https://wa.me/79220201962?text=${encodeURIComponent(getOrderMessage())}`, 'wa')}
-                    className="flex flex-col items-center justify-center gap-2 bg-green-500/10 border border-green-500/30 text-white/80 py-6 px-2 rounded-[2px] hover:bg-green-500 hover:text-white hover:border-green-500 transition-all group/wa cursor-pointer"
+                  <a 
+                    href={`https://wa.me/79220201962?text=${encodeURIComponent(getOrderMessage())}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={() => handleCopy('wa')}
+                    className="flex flex-col items-center justify-center gap-2 bg-green-500/10 border border-green-500/30 text-white/80 py-6 px-2 rounded-[2px] hover:bg-green-500 hover:text-white hover:border-green-500 transition-all group/wa cursor-pointer no-underline"
                   >
                     <MessageCircle size={20} className="text-green-500 group-hover/wa:text-white transition-colors" />
                     <span className="text-[10px] font-bold tracking-widest uppercase">WhatsApp</span>
-                  </button>
-                  <button 
-                    onClick={() => handleCopyAndOpen(`https://t.me/trvlas`, 'tg')}
-                    className="flex flex-col items-center justify-center gap-2 bg-sky-500/10 border border-sky-500/30 text-white/80 py-6 px-2 rounded-[2px] hover:bg-sky-500 hover:text-white hover:border-sky-500 transition-all group/tg cursor-pointer"
+                  </a>
+                  <a 
+                    href="https://t.me/trvlas"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={() => handleCopy('tg')}
+                    className="flex flex-col items-center justify-center gap-2 bg-sky-500/10 border border-sky-500/30 text-white/80 py-6 px-2 rounded-[2px] hover:bg-sky-500 hover:text-white hover:border-sky-500 transition-all group/tg cursor-pointer no-underline"
                   >
                     <Send size={20} className="text-sky-500 group-hover/tg:text-white transition-colors" />
                     <span className="text-[10px] font-bold tracking-widest uppercase">Telegram</span>
-                  </button>
-                  <button 
-                    onClick={() => handleCopyAndOpen(`https://vk.me/club230030571`, 'vk')}
-                    className="flex flex-col items-center justify-center gap-2 bg-blue-600/10 border border-blue-600/30 text-white/80 py-6 px-2 rounded-[2px] hover:bg-blue-600 hover:text-white hover:border-blue-600 transition-all group/vk cursor-pointer"
+                  </a>
+                  <a 
+                    href="https://vk.me/club230030571"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={() => handleCopy('vk')}
+                    className="flex flex-col items-center justify-center gap-2 bg-blue-600/10 border border-blue-600/30 text-white/80 py-6 px-2 rounded-[2px] hover:bg-blue-600 hover:text-white hover:border-blue-600 transition-all group/vk cursor-pointer no-underline"
                   >
                     <svg 
                       viewBox="0 0 24 24" 
-                      className="w-5 h-5 fill-blue-600 group-hover:fill-white transition-colors"
+                      className="w-5 h-5 fill-blue-600 group-hover/vk:fill-white transition-colors"
                       xmlns="http://www.w3.org/2000/svg"
                     >
                       <path d="M12 0C5.37 0 0 5.37 0 12s5.37 12 12 12 12-5.37 12-12S18.63 0 12 0zm5.66 16.59h-1.46c-.55 0-.71-.44-1.7-1.42-.86-.84-1.24-.95-1.46-.95-.3 0-.39.08-.39.49v1.27c0 .41-.13.61-1.21.61-1.78 0-3.76-1.07-5.16-3.04-2.09-2.92-2.67-4.22-2.67-4.59 0-.25.09-.48.55-.48h1.46c.41 0 .56.18.67.48.74 2.18 1.98 4.1 2.49 4.1.19 0 .27-.08.27-.53V9.75c0-.75-.43-.81-.43-1.08 0-.13.1-.26.28-.26h2.3c.34 0 .47.18.47.58v3.13c0 .34.15.46.27.46.19 0 .34-.12.68-.46 1-1.18 1.76-3.05 1.76-3.05.09-.26.27-.48.68-.48h1.46c.44 0 .56.22.46.54-.18.79-1.83 3.12-1.83 3.12-.19.28-.26.39 0 .74.19.26.83.82 1.26 1.34.8 1 1.4 1.79 1.56 2.34.17.5.02.77-.43.77z"/>
                     </svg>
                     <span className="text-[10px] font-bold tracking-widest uppercase">Vkontakte</span>
-                  </button>
+                  </a>
                 </div>
               </div>
             </div>
