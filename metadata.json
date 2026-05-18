@@ -1,0 +1,6 @@
+{
+  "name": "Алтайский Мёд - Натуральный мёд с пасеки",
+  "description": "Магазин натурального алтайского мёда. Широкий выбор сортов: таежный, горный, гречишный и другие. Подарочные бочонки и доставка.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
