@@ -444,7 +444,7 @@ export default function App() {
                     <motion.img 
                       whileHover={{ scale: 2.5, zIndex: 50, y: -10 }}
                       transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                      src={bochonokImage} 
+                      src={lesnoyImg} 
                       alt="ПЭТ 1кг" 
                       className="h-12 sm:h-16 w-auto mb-3 object-contain drop-shadow-md cursor-zoom-in relative z-20" 
                     />
