@@ -653,7 +653,7 @@ export default function App() {
                     <span className="text-[10px] font-bold tracking-widest uppercase">WhatsApp</span>
                   </a>
                   <a 
-                    href="https://t.me/trvlas"
+                    href="tg://resolve?domain=trvlas"
                     target="_blank"
                     rel="noopener noreferrer"
                     onClick={() => handleCopy('tg')}
