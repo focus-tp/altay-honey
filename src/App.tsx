@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { useState } from 'react';
+import { useState, MouseEvent } from 'react';
 import { ShoppingCart, MessageCircle, ArrowRight, Minus, Plus, X, Send } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import devbankImage from './image/devbank.jpeg';
@@ -63,8 +63,19 @@ export default function App() {
     { name: 'Разнотравье тёмное', tag: 'Насыщенное · Травяное', badge: '#F9A825', price: '380₽', desc: 'Собран в период цветения медоносов второй половины лета. Вкус более глубокий, с пряными оттенками.' },
   ];
 
-  const addToCart = (name: string, weight: string, priceStr: string) => {
+  const [flyingItems, setFlyingItems] = useState<{ id: number; x: number; y: number }[]>([]);
+
+  const addToCart = (name: string, weight: string, priceStr: string, e?: MouseEvent) => {
     const price = parseInt(priceStr.replace(/[^0-9]/g, ''));
+    
+    if (e) {
+      const id = Date.now();
+      setFlyingItems(prev => [...prev, { id, x: e.clientX, y: e.clientY }]);
+      setTimeout(() => {
+        setFlyingItems(prev => prev.filter(item => item.id !== id));
+      }, 800);
+    }
+
     setCart(prev => {
       const existing = prev.find(item => item.name === name && item.weight === weight);
       if (existing) {
@@ -118,14 +129,20 @@ export default function App() {
         </ul>
         <div className="flex items-center gap-4">
           <button 
+            id="cart-icon"
             onClick={() => setIsCartOpen(true)}
             className="flex items-center gap-2 text-white/75 hover:text-gold transition-colors relative"
           >
             <ShoppingCart size={20} />
             {cartItemCount > 0 && (
-              <span className="absolute -top-2 -right-2 bg-gold text-dark text-[10px] font-bold w-4 h-4 flex items-center justify-center rounded-full">
+              <motion.span 
+                key={cartItemCount}
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                className="absolute -top-2 -right-2 bg-gold text-dark text-[10px] font-bold w-4 h-4 flex items-center justify-center rounded-full"
+              >
                 {cartItemCount}
-              </span>
+              </motion.span>
             )}
           </button>
           <a href="#checkout" className="hidden sm:block font-sans text-[11px] font-normal tracking-[0.15em] text-dark bg-gold px-5 py-2.5 rounded-[2px] no-underline hover:bg-gold-light transition-all">
@@ -380,14 +397,16 @@ export default function App() {
                     
                     <div className="grid grid-cols-2 gap-3 mt-auto">
                       <button 
-                        onClick={() => addToCart(`${item} (в бочонке)`, '0.5 кг', '2000₽')}
+                        whileTap={{ scale: 0.95 }}
+                        onClick={(e) => addToCart(`${item} (в бочонке)`, '0.5 кг', '2000₽', e)}
                         className="flex flex-col items-center justify-center py-3 border border-gold/20 rounded-[2px] hover:bg-gold hover:border-gold transition-all group/btn cursor-pointer bg-white/5"
                       >
                          <span className="text-[14px] text-white group-hover/btn:text-dark font-bold uppercase tracking-tighter mb-1">0.5 кг</span>
                          <span className="text-xs font-sans font-bold text-gold group-hover/btn:text-dark">2 000 ₽</span>
                       </button>
                       <button 
-                        onClick={() => addToCart(`${item} (в бочонке)`, '1 кг', '2500₽')}
+                        whileTap={{ scale: 0.95 }}
+                        onClick={(e) => addToCart(`${item} (в бочонке)`, '1 кг', '2500₽', e)}
                         className="flex flex-col items-center justify-center py-3 border border-gold/20 rounded-[2px] hover:bg-gold hover:border-gold transition-all group/btn cursor-pointer bg-white/5"
                       >
                          <span className="text-[14px] text-white group-hover/btn:text-dark font-bold uppercase tracking-tighter mb-1">1 кг</span>
@@ -494,14 +513,16 @@ export default function App() {
                     </div>
                     <div className="flex items-center gap-3 sm:gap-12 flex-shrink-0">
                        <button 
-                         onClick={() => addToCart(item.name, '500г', item.p500)}
+                         whileTap={{ scale: 0.95 }}
+                         onClick={(e) => addToCart(item.name, '500г', item.p500, e)}
                          className="text-center group/price cursor-pointer hover:bg-gold/20 p-2 rounded transition-all w-20 sm:w-24"
                        >
                           <p className="text-base sm:text-lg font-sans font-bold text-bark group-hover/price:text-honey transition-colors">{item.p500}</p>
                           <div className="hidden sm:block text-[9px] font-bold text-gold opacity-0 group-hover/price:opacity-100 transition-opacity">КУПИТЬ</div>
                        </button>
                        <button 
-                         onClick={() => addToCart(item.name, '1кг', item.p1)}
+                         whileTap={{ scale: 0.95 }}
+                         onClick={(e) => addToCart(item.name, '1кг', item.p1, e)}
                          className="text-center group/price cursor-pointer hover:bg-gold/20 p-2 rounded transition-all w-20 sm:w-24"
                        >
                           <p className="text-base sm:text-lg font-sans font-bold text-honey group-hover/price:text-honey-dark transition-colors">{item.p1}</p>
@@ -666,6 +687,42 @@ export default function App() {
           <p className="text-[14px] text-white/20">© 2025 — Все права защищены</p>
         </div>
       </footer>
+
+      {/* Fly to Cart Animation Elements */}
+      <div className="fixed inset-0 pointer-events-none z-[9999] overflow-hidden">
+        <AnimatePresence>
+          {flyingItems.map(item => {
+            const cartIcon = typeof document !== 'undefined' ? document.getElementById('cart-icon') : null;
+            const cartRect = cartIcon ? cartIcon.getBoundingClientRect() : { left: typeof window !== 'undefined' ? window.innerWidth - 50 : 0, top: 20 };
+            
+            return (
+              <motion.div
+                key={item.id}
+                initial={{ 
+                  x: item.x - 16, 
+                  y: item.y - 16, 
+                  scale: 0.2, 
+                  opacity: 0 
+                }}
+                animate={{ 
+                  x: [item.x - 16, item.x - 60, cartRect.left + 10],
+                  y: [item.y - 16, item.y - 120, cartRect.top + 10],
+                  scale: [0.2, 1.2, 0.1],
+                  opacity: [0, 1, 0.8, 0]
+                }}
+                transition={{ 
+                  duration: 0.9, 
+                  times: [0, 0.3, 1],
+                  ease: "easeInOut" 
+                }}
+                className="fixed top-0 left-0 w-8 h-8 rounded-full bg-gold shadow-[0_0_20px_#E8B84B] flex items-center justify-center"
+              >
+                <div className="w-2 h-2 bg-white rounded-full animate-ping" />
+              </motion.div>
+            );
+          })}
+        </AnimatePresence>
+      </div>
     </div>
   );
 }
