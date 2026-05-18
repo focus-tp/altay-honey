@@ -421,35 +421,35 @@ export default function App() {
             <h2 className="text-4xl md:text-5xl font-light mb-12 tracking-tight">Честные <span className="italic text-bark">цены</span></h2>
             
             {/* Table Headers with Images */}
-            <div className="hidden sm:flex border-b border-bark/20 pb-6 mb-2 px-4 -mx-4 items-end">
-              <div className="flex-1">
+            <div className="flex border-b border-bark/20 pb-4 sm:pb-6 mb-2 px-4 -mx-4 items-end">
+              <div className="flex-1 pr-2">
                 <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-bark/40">Сорт мёда</span>
               </div>
-              <div className="flex items-center gap-12">
-                <div className="flex flex-col items-center w-24 group/jar">
+              <div className="flex items-center gap-3 sm:gap-12 flex-shrink-0">
+                <div className="flex flex-col items-center w-20 sm:w-24 group/jar">
                   <div className="relative overflow-visible">
                     <motion.img 
                       whileHover={{ scale: 2.5, zIndex: 50, y: -10 }}
                       transition={{ type: "spring", stiffness: 300, damping: 20 }}
                       src={dyagil05Img} 
                       alt="Стекло 500г" 
-                      className="h-16 w-auto mb-3 object-contain drop-shadow-md cursor-zoom-in relative z-20" 
+                      className="h-12 sm:h-16 w-auto mb-3 object-contain drop-shadow-md cursor-zoom-in relative z-20" 
                     />
                   </div>
-                  <span className="text-[10px] font-bold uppercase tracking-widest text-bark">Стекло</span>
+                  <span className="hidden sm:block text-[10px] font-bold uppercase tracking-widest text-bark">Стекло</span>
                   <span className="text-[11px] font-mono uppercase tracking-tighter text-bark-mid">500 гр</span>
                 </div>
-                <div className="flex flex-col items-center w-24 group/jar">
+                <div className="flex flex-col items-center w-20 sm:w-24 group/jar">
                   <div className="relative overflow-visible">
                     <motion.img 
                       whileHover={{ scale: 2.5, zIndex: 50, y: -10 }}
                       transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                      src={lesnoyImg} 
+                      src={bochonokImage} 
                       alt="ПЭТ 1кг" 
-                      className="h-16 w-auto mb-3 object-contain drop-shadow-md cursor-zoom-in relative z-20" 
+                      className="h-12 sm:h-16 w-auto mb-3 object-contain drop-shadow-md cursor-zoom-in relative z-20" 
                     />
                   </div>
-                  <span className="text-[10px] font-bold uppercase tracking-widest text-bark">ПЭТ банка</span>
+                  <span className="hidden sm:block text-[10px] font-bold uppercase tracking-widest text-bark">ПЭТ банка</span>
                   <span className="text-[11px] font-mono uppercase tracking-tighter text-bark-mid">1 кг</span>
                 </div>
               </div>
@@ -473,10 +473,10 @@ export default function App() {
                 ].map((item, idx) => (
                  <div 
                    key={idx} 
-                   className={`flex flex-col sm:flex-row sm:items-center justify-between py-6 border-b border-bark/10 group transition-all px-4 -mx-4 rounded-lg ${selectedVariety === item.name ? 'bg-gold/10 border-gold/30 ring-1 ring-gold/20' : 'hover:bg-bark/5'}`}
+                   className={`flex flex-row items-center justify-between py-4 sm:py-6 border-b border-bark/10 group transition-all px-4 -mx-4 rounded-lg ${selectedVariety === item.name ? 'bg-gold/10 border-gold/30 ring-1 ring-gold/20' : 'hover:bg-bark/5'}`}
                  >
-                    <div className="flex flex-col gap-1">
-                      <span className="text-xl font-semibold tracking-wide group-hover:text-honey-dark transition-colors flex items-center gap-2">
+                    <div className="flex flex-col gap-1 flex-1 min-w-0 pr-2">
+                      <span className="text-base sm:text-xl font-semibold tracking-wide group-hover:text-honey-dark transition-colors flex items-center flex-wrap gap-2">
                         {item.name}
                         {selectedVariety === item.name && (
                           <motion.span 
@@ -489,23 +489,23 @@ export default function App() {
                         )}
                       </span>
                       {selectedVariety === item.name && (
-                        <p className="text-xs text-bark/50 italic">Свежий сбор этого сезона</p>
+                        <p className="text-[10px] sm:text-xs text-bark/50 italic">Свежий сбор этого сезона</p>
                       )}
                     </div>
-                    <div className="flex items-center gap-8 mt-4 sm:mt-0">
+                    <div className="flex items-center gap-3 sm:gap-12 flex-shrink-0">
                        <button 
                          onClick={() => addToCart(item.name, '500г', item.p500)}
-                         className="text-center sm:text-right group/price cursor-pointer hover:bg-gold/20 p-2 rounded transition-all w-24"
+                         className="text-center group/price cursor-pointer hover:bg-gold/20 p-2 rounded transition-all w-20 sm:w-24"
                        >
-                          <p className="text-lg font-sans font-bold text-bark group-hover/price:text-honey transition-colors">{item.p500}</p>
-                          <div className="text-[9px] font-bold text-gold opacity-0 group-hover/price:opacity-100 transition-opacity">КУПИТЬ</div>
+                          <p className="text-base sm:text-lg font-sans font-bold text-bark group-hover/price:text-honey transition-colors">{item.p500}</p>
+                          <div className="hidden sm:block text-[9px] font-bold text-gold opacity-0 group-hover/price:opacity-100 transition-opacity">КУПИТЬ</div>
                        </button>
                        <button 
                          onClick={() => addToCart(item.name, '1кг', item.p1)}
-                         className="text-center sm:text-right group/price cursor-pointer hover:bg-gold/20 p-2 rounded transition-all w-24"
+                         className="text-center group/price cursor-pointer hover:bg-gold/20 p-2 rounded transition-all w-20 sm:w-24"
                        >
-                          <p className="text-lg font-sans font-bold text-honey group-hover/price:text-honey-dark transition-colors">{item.p1}</p>
-                          <div className="text-[9px] font-bold text-gold opacity-0 group-hover/price:opacity-100 transition-opacity">КУПИТЬ</div>
+                          <p className="text-base sm:text-lg font-sans font-bold text-honey group-hover/price:text-honey-dark transition-colors">{item.p1}</p>
+                          <div className="hidden sm:block text-[9px] font-bold text-gold opacity-0 group-hover/price:opacity-100 transition-opacity">КУПИТЬ</div>
                        </button>
                     </div>
                  </div>
